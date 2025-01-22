@@ -15,9 +15,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Product, ProductPageState } from "../utils/types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductsPage() {
     const router = useRouter();
+    const [loading, setLoading] = useState<boolean>(true);
     const [data, setData] = useState<ProductPageState>({
         products: [],
         page: 1,
@@ -30,6 +32,7 @@ export default function ProductsPage() {
     }
 
     const fetchProductsPage = async () => {
+        setLoading(true);
         const response = await fetch(`/api/products?page=${data.page}&count=${data.count}`);
         
         if (!response.ok){
@@ -49,6 +52,7 @@ export default function ProductsPage() {
                 })
             }
         }
+        setLoading(false);
     }
 
     useEffect(() => { fetchProductsPage() }, [])
@@ -56,57 +60,63 @@ export default function ProductsPage() {
 
     return (
         <PageFrame title={"Products"}>
-            <Table>
-            <TableHeader>
-                <TableRow>
-                <TableHead className="text-center">Id</TableHead>
-                <TableHead className="text-center">Name</TableHead>
-                <TableHead className="text-center">Variant</TableHead>
-                <TableHead className="text-center">Price</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {data.products.map((product) => (
-                <TableRow key={product.id} className="hover:cursor-pointer" onClick={()=>{viewProductDetails(product.id)}}>
-                    <TableCell className="text-center">{product.id}</TableCell>
-                    <TableCell className="text-center">{product.productName}</TableCell>
-                    <TableCell className="text-center">{product.productVariant}</TableCell>
-                    <TableCell className="text-center">{product.productPrice}</TableCell>
-                </TableRow>
-                ))}
-            </TableBody>
-            <TableFooter>
-                <TableRow>
-                <TableCell colSpan={12}>
-                    
-                    <div className="flex justify-between items-center gap-4">
-                        <div className="text-accent">
-                            Page {data.page}/{data.maxPages}
+            {
+                loading ? 
+                <Skeleton className="w-full h-[400px]" /> 
+                :
+                <Table>
+                <TableHeader>
+                        <TableRow>
+                        <TableHead className="text-center">Id</TableHead>
+                        <TableHead className="text-center">Name</TableHead>
+                        <TableHead className="text-center">Variant</TableHead>
+                        <TableHead className="text-center">Price</TableHead>
+                        </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {data.products.map((product) => (
+                    <TableRow key={product.id} className="hover:cursor-pointer" onClick={()=>{viewProductDetails(product.id)}}>
+                        <TableCell className="text-center">{product.id}</TableCell>
+                        <TableCell className="text-center">{product.productName}</TableCell>
+                        <TableCell className="text-center">{product.productVariant}</TableCell>
+                        <TableCell className="text-center">{product.productPrice}</TableCell>
+                    </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                    <TableCell colSpan={12}>
+                        
+                        <div className="flex justify-between items-center gap-4">
+                            <div className="text-accent">
+                                Page {data.page}/{data.maxPages}
+                            </div>
+
+                            <div className="flex justify-end items-center gap-4">
+                            <Button className="bg-accent" 
+                            disabled={data.page <= 1}
+                            onClick={() =>  {
+                                setData({...data, page: data.page - 1})
+                            }}>
+                                <ChevronLeft/>
+                            </Button>
+
+
+                            <Button className="bg-accent" 
+                            disabled={data.page >= data.maxPages}
+                            onClick={() => {
+                                setData({...data, page: data.page + 1})
+                            }}>
+                                <ChevronRight/>
+                            </Button>
+                            </div>
                         </div>
-
-                        <div className="flex justify-end items-center gap-4">
-                        <Button className="bg-accent" 
-                        disabled={data.page <= 1}
-                        onClick={() =>  {
-                            setData({...data, page: data.page - 1})
-                        }}>
-                            <ChevronLeft/>
-                        </Button>
-
-
-                        <Button className="bg-accent" 
-                        disabled={data.page >= data.maxPages}
-                        onClick={() => {
-                            setData({...data, page: data.page + 1})
-                        }}>
-                            <ChevronRight/>
-                        </Button>
-                        </div>
-                    </div>
-                </TableCell>
-                </TableRow>
-            </TableFooter>
-            </Table>
+                    </TableCell>
+                    </TableRow>
+                </TableFooter>
+                </Table>
+            }
+            
         </PageFrame>
     );
 }

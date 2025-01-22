@@ -82,19 +82,17 @@ function SidebarComponent() {
 export default function SidebarNavigator({children} : {children : ReactNode}) {
     return (
         <SidebarProvider defaultOpen={false}>
-          <div className="absolute left-0 top-0 flex flex-row">
-            {SidebarComponent()}
-        
-            <div className="flex flex-col justify-center">
-              <SidebarTrigger 
-              size="icon"
-              className="
-              h-32 w-12
-              relative -left-[1.0px] z-10
-              bg-sidebar hover:bg-sidebar-accent
-              border-2 border-l-0 rounded-none rounded-r-md border-sidebar-border border-l-sidebar-accent"/> 
+            <div className="absolute left-0 top-0 flex flex-row">
+                {SidebarComponent()}
             </div>
-          </div>
+
+            <SidebarTrigger 
+            size="icon"
+            className="
+            w-14 h-14 aspect-square rounded-full
+            fixed bottom-5 right-5
+            bg-accent text-background hover:text-background
+            border-2 border-l-0 border-sidebar-border border-l-sidebar-accent"/> 
 
           {children}
         </SidebarProvider>
