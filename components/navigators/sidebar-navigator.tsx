@@ -17,7 +17,7 @@ import {
 import { Home, Package2 } from "lucide-react";
 import AppSettings from "../providers/app-settings";
 import Link from "next/link";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
   const routes = [
     {
       title: "Home",
@@ -46,7 +46,7 @@ function SidebarComponent() {
             </h1>
 
             <SidebarGroupLabel className="pt-0 h-fit">
-                I'm Your Turuq App Navigator
+                I&apos;m Your Turuq App Navigator
             </SidebarGroupLabel>
         </div>
     </SidebarHeader>

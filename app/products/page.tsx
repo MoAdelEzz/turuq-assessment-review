@@ -4,7 +4,6 @@ import PageFrame from "@/components/ui/page-frame";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableFooter,
     TableHead,

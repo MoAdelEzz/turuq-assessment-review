@@ -5,7 +5,7 @@ import PageFrame from "@/components/ui/page-frame";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function ProductDetails({params} : {params: any}) {
+export default function ProductDetails() {
     const path = usePathname();
     const [product, setProduct] = useState<Product | null>(null)
 
