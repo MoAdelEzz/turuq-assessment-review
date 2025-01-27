@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
-import { ThemeType } from "@/app/utils/types";
+import { ThemeType } from "@/lib/types";
 
 export default function AppSettings() {
 

@@ -11,13 +11,14 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Product, ProductPageState } from "../utils/types";
+import { Product, ProductPageState } from "../../lib/types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductsPage() {
     const router = useRouter();
+    
     const [loading, setLoading] = useState<boolean>(true);
     const [data, setData] = useState<ProductPageState>({
         products: [],
@@ -25,10 +26,6 @@ export default function ProductsPage() {
         count: 10,
         maxPages: 2,
     })
-
-    const viewProductDetails = (id: string) => {
-        router.push(`products/${id}`)
-    }
 
     const fetchProductsPage = async () => {
         setLoading(true);
@@ -38,7 +35,7 @@ export default function ProductsPage() {
             console.log("smth went wrong");
         } 
         else {
-            const res : {data: Array<Product>, error: string, maxPages: number} = await response.json();
+            const res = await response.json();
             if (res.error != null) {
                 console.error("some error occured");
             }
@@ -74,7 +71,7 @@ export default function ProductsPage() {
                 </TableHeader>
                 <TableBody>
                     {data.products.map((product) => (
-                    <TableRow key={product.id} className="hover:cursor-pointer" onClick={()=>{viewProductDetails(product.id)}}>
+                    <TableRow key={product.id} className="hover:cursor-pointer" onClick={()=>{router.push(`products/${product.id}`)}}>
                         <TableCell className="text-center">{product.id}</TableCell>
                         <TableCell className="text-center">{product.productName}</TableCell>
                         <TableCell className="text-center">{product.productVariant}</TableCell>

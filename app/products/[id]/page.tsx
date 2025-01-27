@@ -1,31 +1,23 @@
-'use client'
-import { Product } from "@/app/utils/types";
+
+import {redirect} from "next/navigation"
 import { Card } from "@/components/ui/card";
 import PageFrame from "@/components/ui/page-frame";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function ProductDetails() {
-    const path = usePathname();
-    const [product, setProduct] = useState<Product | null>(null)
-
-    const fetchProductData = async () => {
-        const id : string = path.split("/").reverse()[0]        
+export const getProductInfo = async (id: string) => {
+    const response = await fetch(`http://localhost:3000/api/products/${id}`, { method: "GET" });
+    if (response.ok) {
         
-        const response = await fetch(`/api/products?id=${id}`, {
-            method: "GET"
-        });
-        if (!response.ok) {
-            console.error("something went wrong while fetching");
-        }  
-        else{ 
-            const result = await response.json()            
-            setProduct(result.data);
-        }
+        return response.json();
+    }  
+    else{ 
+        redirect("/products")
     }
-
-    useEffect( () => {fetchProductData()}, [])
-
+}
+   
+export default async function ProductDetails({params}: {params: {id: string}}) {
+    const { id } = await params;
+    const { product } = await getProductInfo(id);
+    
     return (
         <PageFrame title={`Product Details`}>
             <div className="grid grid-cols-12 gap-y-5 lg:gap-10 w-full">
